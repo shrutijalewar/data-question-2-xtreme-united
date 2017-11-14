@@ -1,0 +1,80 @@
+-- Table: public.codes_list_of_violations
+-- DROP TABLE public.codes_list_of_violations;
+CREATE TABLE public.codes_list_of_violations
+(
+    violation_id text COLLATE pg_catalog."default",
+    org_id text COLLATE pg_catalog."default",
+    violation_type text COLLATE pg_catalog."default",
+    violation_desc text COLLATE pg_catalog."default",
+    violation_text text COLLATE pg_catalog."default",
+    remedial_text text COLLATE pg_catalog."default",
+    tables_name text COLLATE pg_catalog."default",
+    expired_flag text COLLATE pg_catalog."default",
+    date_expired text COLLATE pg_catalog."default",
+    created_by text COLLATE pg_catalog."default",
+    date_created text COLLATE pg_catalog."default",
+    modified_by text COLLATE pg_catalog."default",
+    date_modified text COLLATE pg_catalog."default",
+    fee_setup_id text COLLATE pg_catalog."default"
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+ALTER TABLE public.codes_list_of_violations
+    OWNER to postgres;
+
+	
+-- Table: public.property_standards_violations
+--DROP TABLE public.property_standards_violations;
+CREATE TABLE public.property_standards_violations
+(
+    request_no text COLLATE pg_catalog."default" NOT NULL,
+    date_recv date NOT NULL,
+    prop_apn text COLLATE pg_catalog."default",
+    prop_address text COLLATE pg_catalog."default",
+    city text COLLATE pg_catalog."default",
+    state text COLLATE pg_catalog."default",
+    zip text COLLATE pg_catalog."default",
+    prop_owner text COLLATE pg_catalog."default",
+    complaint_source text COLLATE pg_catalog."default",
+    reported_problem text COLLATE pg_catalog."default",
+    status text COLLATE pg_catalog."default",
+    council_district text COLLATE pg_catalog."default",
+    last_activity_date date,
+    last_activity text COLLATE pg_catalog."default",
+    last_activity_code text COLLATE pg_catalog."default",
+    violations_noted text COLLATE pg_catalog."default",
+    mapped_loc text COLLATE pg_catalog."default"
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+ALTER TABLE public.property_standards_violations
+    OWNER to postgres;
+
+	
+-- View: public.violation_desc_view
+-- DROP VIEW public.violation_desc_view;
+CREATE OR REPLACE VIEW public.violation_desc_view AS
+ SELECT codes_list_of_violations.violation_id,
+    regexp_split_to_table(codes_list_of_violations.violation_desc, ' '::text) AS desc_word
+   FROM codes_list_of_violations;
+
+ALTER TABLE public.violation_desc_view
+    OWNER TO postgres;
+	
+
+-- View: public.violation_text_view
+-- DROP VIEW public.violation_text_view;
+CREATE OR REPLACE VIEW public.violation_text_view AS
+ SELECT codes_list_of_violations.violation_id,
+    regexp_split_to_table(codes_list_of_violations.violation_text, ' '::text) AS text_word
+   FROM codes_list_of_violations;
+
+ALTER TABLE public.violation_text_view
+    OWNER TO postgres;
+
+	
+	
